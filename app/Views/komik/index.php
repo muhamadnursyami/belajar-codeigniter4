@@ -24,7 +24,7 @@
                             </th>
                             <td><img src="/img/<?= $dataKomik['sampul'] ?>" alt="" class="sampul"></td>
                             <td><?= $dataKomik['judul'] ?></td>
-                            <td><a href="" class="btn btn-success">Detail</a></td>
+                            <td><a href="/komik/<?= $dataKomik['slug'] ?>" class="btn btn-success">Detail</a></td>
                         </tr>
 
                     </tbody>
