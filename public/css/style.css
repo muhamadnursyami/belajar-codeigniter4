@@ -1,0 +1,9 @@
+.sampul {
+  width: 100px;
+}
+
+/* ambil class yang namanya table, dan ambil  yang berisikan tbody  dan ambil didalam tbody
+yang berikan tr dan ambil semua didalalm tr apa pun itu, baik th atau  td didalam tr*/
+.table > tbody > tr > * {
+  vertical-align: middle;
+}
