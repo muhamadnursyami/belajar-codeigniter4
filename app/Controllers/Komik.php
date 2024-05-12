@@ -55,8 +55,15 @@ class Komik extends BaseController
 
     public function create()
     {
+        // ambil session yang dikirim method save, pada validation
+        // komentar session di baris ini, karena kita sudah menaruh di BaseControler.php
+        // dan udah bisa dipakai di semua kontroler dan udah ada  jadi nggak perlu
+        //pangiil lagi
+        // session();
+
         $data = [
             'title' => 'Form Tambah Data Komik',
+            'validation' => session()->getFlashdata('validation') ?? \Config\Services::validation(),
         ];
 
         return view('komik/create', $data);
@@ -64,6 +71,37 @@ class Komik extends BaseController
 
     public function save()
     {
+        // Validasi input,valiasi berdasarkan name dari inputanya
+        if (!$this->validate([
+            // pada input judul, judul harus di isi
+            // dan judul tidak boleh sama, karena unique
+            // jadi ada attribute bernama is_uniqeu
+            // yang itu adalah array, dimana kita menetapkan bawah
+            // pada tabel komik.judul, bahwa di table komik dan di field
+            // judul akan ditetapkan mejadi unique dan tidak boleh sama.
+            'judul' => 'required|is_unique[komik.judul]',
+            //! kedepannya lebih baik di tulis seperti penulis, jangan seperti judul, supaya lebih jelas
+            'penulis' => [
+                'rules' => 'required|is_unique[komik.penulis]',
+                'errors' => [
+                    'required' => '{field} komik harus diisi',
+                    'is_unique' => '{field} komik sudah ada'
+                ]
+            ]
+        ])) {
+            // Mengambil pesan error dar srevices validation
+            // $validation = \Config\Services::validation();
+            // dd($validation); untuk melihat& mengecek isi error 
+
+            // yang data  tersebut yaitu withInput
+            // akan dikirim ke halaman /komik/create
+            // jadi kita perlu menangkap session validation di halaman tersebut.
+            session()->setFlashdata('validation', \Config\Services::validation());
+            return redirect()->to('/komik/create')->withInput();
+        }
+
+
+
         // membuat slug 
         // di ci 4 ada nama fungsi untuk membuat slug yaitu url_title
         // value adalah isi nya
